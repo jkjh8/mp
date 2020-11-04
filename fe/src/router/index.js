@@ -6,6 +6,7 @@ import Player from '../views/Player.vue'
 import IPAddr from '../views/IPAddr.vue'
 import About from '../views/About.vue'
 import LoginPage from '../views/Login.vue'
+import Join from '../views/Join.vue'
 import store from '../store'
 
 Vue.use(VueRouter)
@@ -56,6 +57,11 @@ const routes = [
     path: '/login',
     name: 'LoginPage',
     component: LoginPage
+  },
+  {
+    path: '/join',
+    name: 'Join',
+    component: Join
   }
 ]
 

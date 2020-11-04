@@ -1,14 +1,13 @@
 const LocalStrategy = require('passport-local').Strategy;
 const passport = require('passport');
 const users = require('../data/users.json')
+
 exports.config = (passport) => {
   passport.serializeUser((user, done) => {
-    console.log("serial 호출됨")
     done(null, user.id)
   });
 
   passport.deserializeUser((id, done) => {
-    console.log("deserial 호출됨")
     const result = users.filter((user) => user.id === id);
     if (result.length > 0) {
       done(null, result[0]);
