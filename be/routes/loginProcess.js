@@ -5,16 +5,21 @@ const router = express.Router();
 const users = require('../data/users.json');
 
 router.get('/', function(req, res, next) {
+  // passport.authenticate('local', function(err, user, info) {
+  //   if(err) { return next(err) }
+  //   if(!user) { return res.redirect('/login') }
+  //   req.loing
+  // })
   if (req.isAuthenticated() && req.user) {
     return res.json({ user: req.user });
   }
-  return res.json({ user: null })  
+  return res.json({ user: null })
 });
 
 router.post('/', function(req, res, next) {
-  if (req.isAuthenticated()) {
-    return res.redirect('/');
-  }
+  // if (req.isAuthenticated()) {
+  //   return res.redirect('/');
+  // }
   passport.authenticate('local', (authError, user, info) => {
     if (authError) {
       console.error(authError);

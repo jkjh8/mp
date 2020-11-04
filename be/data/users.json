@@ -13,6 +13,11 @@
     "id": "john",
     "password": "1234",
     "name": "존"
+  },
+  {
+    "id": "admin",
+    "password": "1234",
+    "name": "관리자"
   }
 
 ]

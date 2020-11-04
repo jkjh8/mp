@@ -4,8 +4,11 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 import vuetify from './plugins/vuetify'
+import VueCookie from 'vue-cookie'
 
-axios.defaults.baseURL = 'http://localhost:3000/api'
+Vue.use(VueCookie)
+axios.defaults.baseURL = 'http://' + window.location.hostname + ':3000/api'
+axios.defaults.withCredentials = true
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
 

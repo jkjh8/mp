@@ -13,18 +13,13 @@ export default {
   computed: {
     ...mapState(['user'])
   },
-  data () {
-    return {
-      user: null
-    }
-  },
   created () {
-    this.$http.get('/login').then((res) => {
+    this.$http.get('/loginProcess').then((res) => {
       const user = res.data.user
       if (user) {
-        this.$store.commit('serUser', user)
+        this.$store.commit('setUser', user)
       } else {
-        this.$router.push({ name: 'LoginPage' })
+        // this.$router.push({ name: 'LoginPage' })
       }
     }).catch((err) => {
       console.error(err)
