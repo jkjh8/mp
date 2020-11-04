@@ -2,8 +2,6 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 
-const users = require('../data/users.json');
-
 router.get('/', function(req, res, next) {
   // passport.authenticate('local', function(err, user, info) {
   //   if(err) { return next(err) }

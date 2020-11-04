@@ -2,11 +2,16 @@
   "name": "be",
   "version": "0.0.0",
   "private": true,
+  "bin": {
+    "app": "./bin/www"
+  },
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "build": "pkg ."
   },
   "dependencies": {
     "connect-history-api-fallback": "^1.6.0",
+    "connect-mongo": "^3.2.0",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
@@ -14,9 +19,14 @@
     "express": "~4.16.1",
     "express-session": "^1.17.1",
     "http-errors": "^1.8.0",
+    "mongoose": "^5.10.11",
     "morgan": "~1.9.1",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
+    "pkg": "^4.4.9",
     "pug": "2.0.0-beta11"
+  },
+  "pkg": {
+    "assets": "public/**/**"
   }
 }

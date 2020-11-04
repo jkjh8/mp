@@ -8,6 +8,15 @@ var passport = require('passport')
 // var history = require('connect-history-api-fallback'); 
 var cors = require('cors');
 
+const mongoose = require('mongoose')
+const MongoStore = require("connect-mongo")(session)
+const User = require('./models/User.js')
+
+mongoose.connect('mongodb://localhost:27017/MediaServer', (err) => {
+  if (err) return console.error(err)
+  console.log('mongoose connect!')
+})
+
 require('./passport').config(passport);
 require('dotenv').config();
 
@@ -30,7 +39,8 @@ app.use(session({
   secret: process.env.COOKIE_SECRET,
   cookie: {
     httpOnly: true,
-    secure: false
+    secure: false,
+    store: new MongoStore({ mongooseConnection: mongoose.connection, ttl: 60*60*24 })
   }
 }))
 app.use(passport.initialize());
@@ -55,3 +65,5 @@ app.use(function(req, res, next) {
 // });
 
 module.exports = app;
+
+// User.create({ id: 'admin', name: 'administrator', password: 'password'})

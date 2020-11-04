@@ -1,6 +1,6 @@
 const LocalStrategy = require('passport-local').Strategy;
 const passport = require('passport');
-const users = require('../data/users.json')
+const User = require("../models/User.js")
 
 exports.config = (passport) => {
   passport.serializeUser((user, done) => {
@@ -8,26 +8,27 @@ exports.config = (passport) => {
   });
 
   passport.deserializeUser((id, done) => {
-    const result = users.filter((user) => user.id === id);
-    if (result.length > 0) {
-      done(null, result[0]);
-    }
+    const result = User.findOne({ id: id },(err, user) => {
+      if (err) return console.log(err)
+      done(null, user);
+    })
   });
 
   passport.use(new LocalStrategy({
     usernameField: 'id',
     passwordField: 'password',
   }, (id, password, done) => {
-    const result = users.filter((user) => user.id === id);
-    if (result.length > 0) {
-      const user = result[0];
-      if (password === user.password) {
-        done(null, user);
-      } else {
-        done(null, false, { message: "비밀번호를 확인하세요"});
+    const result = User.findOne({ id: id }, (err, user) => {
+      if (err) return console.log(err)
+      if (!user) {
+        done(null, false, { message: "가입되지 않은 사용자"});
+      } else {  
+        if (user.password === password) {
+          done(null, user)
+        } else {
+          done(null, false, { message: "비밀번호를 확인하세요"});
+        }
       }
-    } else {
-      done(null, false, { message: "가입되지 않은 사용자"});
-    }
-  }));
+    })
+  }))
 };
