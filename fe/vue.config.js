@@ -1,6 +1,11 @@
 module.exports = {
-  outputDir: 'C:\\Users\\kjh\\Desktop\\dev\\mp\\be\\public',
+  pluginOptions: {
+    quasar: {
+      importStrategy: 'kebab',
+      rtlSupport: false
+    }
+  },
   transpileDependencies: [
-    'vuetify'
+    'quasar'
   ]
 }

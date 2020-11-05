@@ -1,67 +1,22 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Playlist from '../views/Playlist.vue'
-import Files from '../views/Files.vue'
-import Player from '../views/Player.vue'
-import IPAddr from '../views/IPAddr.vue'
-import About from '../views/About.vue'
-import LoginPage from '../views/Login.vue'
-import Join from '../views/Join.vue'
-import store from '../store'
+import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
-
-const requireAuth = () => (from, to, next) => {
-  console.log(store.state.user)
-  if (store.state.user) return next()
-  next('/login')
-}
 
 const routes = [
   {
     path: '/',
-    name: '/',
-    component: Playlist
-    // beforeEnter: requireAuth()
-  },
-  {
-    path: '/home',
     name: 'Home',
-    component: Playlist,
-    beforeEnter: requireAuth()
-  },
-  {
-    path: '/files',
-    name: 'Files',
-    component: Files,
-    beforeEnter: requireAuth()
-  },
-  {
-    path: '/player',
-    name: 'Player',
-    component: Player,
-    beforeEnter: requireAuth()
-  },
-  {
-    path: '/ipaddr',
-    name: 'IPAddr',
-    component: IPAddr,
-    beforeEnter: requireAuth()
+    component: Home
   },
   {
     path: '/about',
     name: 'About',
-    component: About
-  },
-  {
-    path: '/login',
-    name: 'LoginPage',
-    component: LoginPage
-  },
-  {
-    path: '/join',
-    name: 'Join',
-    component: Join
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   }
 ]
 

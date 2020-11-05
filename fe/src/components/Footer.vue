@@ -1,7 +1,12 @@
 <template>
-  <v-footer fixed padless class="blue-grey darken-3 font-weight-medium" height="80px">
-    <v-container class="text-center">
-      {{ new Date().getFullYear() }} — Media Consulting Society
-    </v-container>
-  </v-footer>
-</template>>
+  <q-footer elevated class="bg-grey-8 text-white">
+    <q-toolbar>
+      <q-toolbar-title>
+        <q-avatar>
+          <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
+        </q-avatar>
+        Footer
+      </q-toolbar-title>
+    </q-toolbar>
+  </q-footer>
+</template>
