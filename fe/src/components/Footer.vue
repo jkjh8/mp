@@ -1,12 +1,9 @@
 <template>
-  <q-footer elevated class="bg-grey-8 text-white">
+  <q-footer elevated class="bg-blue-grey-10 text-white">
     <q-toolbar>
-      <q-toolbar-title>
-        <q-avatar>
-          <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
-        </q-avatar>
-        Footer
-      </q-toolbar-title>
+      <div style="font-size: 0.5rem" class="absolute-center">
+        MEDIA CONSULTING SOCIETY
+      </div>
     </q-toolbar>
   </q-footer>
 </template>
