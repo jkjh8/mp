@@ -3,6 +3,7 @@ const { Mongoose } = require("mongoose");
 const mongoose = require('mongoose')
 
 const setupSchema = new mongoose.Schema({
+  _id: { type: String},
   endclose: { type: Boolean},
   fullscreen: { type: Boolean},
   gw: { type: String},

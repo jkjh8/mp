@@ -1,11 +1,11 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var session = require('express-session')
-var passport = require('passport')
-// var history = require('connect-history-api-fallback'); 
-var cors = require('cors');
-var logger = require('morgan');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const session = require('express-session')
+const passport = require('passport')
+// const history = require('connect-history-api-fallback'); 
+const cors = require('cors');
+const logger = require('morgan');
 
 const mongoose = require('mongoose')
 const MongoStore = require("connect-mongo")(session)
@@ -42,11 +42,11 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session())
 app.use('/', require('./routes/index'));
-app.use('/api/loginProcess', require('./routes/loginProcess'))
+// app.use('/api/loginProcess', require('./routes/login'))
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  res.send(createError(404));
+  res.send(404);
 });
 
 module.exports = app;
