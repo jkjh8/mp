@@ -1,0 +1,9 @@
+<template>
+  <div>
+    <q-card>
+      <q-card-title>
+        FILELIST
+      </q-card-title>
+    </q-card>
+  </div>
+</template>
