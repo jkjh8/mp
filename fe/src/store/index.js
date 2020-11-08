@@ -19,11 +19,30 @@ export default function (/* { ssrContext } */) {
       //
     },
     state: {
-      authUser: null
+      authUser: null,
+      playlistId: 'Playlist 1',
+      filelist: []
     },
     mutations: {
       setUser (state, payload) {
         state.authUser = payload
+      },
+      setPlaylistId (state, payload) {
+        state.playlistId = payload
+      },
+      updateFilelist (state, payload) {
+        state.filelist = payload
+      }
+    },
+    actions: {
+      setUser ({ commit }, payload) {
+        commit('setUser', payload)
+      },
+      setPlaylistId ({ commit }, payload) {
+        commit('setPlaylistId', payload)
+      },
+      updateFilelist ({ commit }, payload) {
+        commit('updateFilelist', payload)
       }
     },
     strict: process.env.DEBUGGING

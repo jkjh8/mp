@@ -14,11 +14,13 @@ router.get('/play/:filename', async function(req, res, next) {
   return res.json({ success: true})
 });
 
-router.get('/playid/:playid', async function(req, res, next) {
-  const msg = new Buffer.from(`playid,${req.params.playid}`)
-  await udpSender.send(msg, 0, msg.length, port, host, (err) => {
-    if (err) return res.json({ success: true, error: err})
-  })
+router.get('/playid/', async function(req, res, next) {
+  console.log(req.query.id, req.query.playid)
+
+  // const msg = new Buffer.from(`playid,${req.params.playid}`)
+  // await udpSender.send(msg, 0, msg.length, port, host, (err) => {
+  //   if (err) return res.json({ success: true, error: err})
+  // })
   return res.json({ success: true})
 });
 

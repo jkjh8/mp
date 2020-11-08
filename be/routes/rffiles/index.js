@@ -21,13 +21,11 @@ router.get('/', async function(req, res, next) {
       size: fileinfo.media.track[0].FileSize
     })
   }
-  db_filelist.deleteMany({}, (err, docu) => {
-    if (err) return console.error(err)
-    db_filelist.insertMany(fileinfoArray, (err, docu) => {
-      if (err) return console.error(err)
-      return res.json(docu)
-    })
-  }) (req, res, next)
+  await db_filelist.deleteMany({})
+  const rtmsg = await db_filelist.insertMany(fileinfoArray)
+  if (rtmsg) {
+    return res.json(rtmsg)
+  }
   return res.json({ success: false })
 });
 

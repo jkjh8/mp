@@ -19,7 +19,6 @@
       <q-separator />
 
       <q-card-section>
-        {{ this.$store.state.authUser }}
         <q-form
           v-model="valid"
           @submit="onSubmit"

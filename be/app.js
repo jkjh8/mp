@@ -1,4 +1,5 @@
 const express = require('express');
+const http = require('http');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const session = require('express-session')
@@ -7,9 +8,20 @@ const passport = require('passport')
 const cors = require('cors');
 const logger = require('morgan');
 
-const mongoose = require('mongoose')
-const MongoStore = require("connect-mongo")(session)
-const User = require('./models/User.js')
+const fileUpload = require('express-fileupload');
+
+
+//mongoose
+const mongoose = require('mongoose');
+const MongoStore = require("connect-mongo")(session);
+const User = require('./models/User.js');
+const { RequestTimeout } = require('http-errors');
+
+//socket io
+const server = http.createServer(app);
+const io = require('socket.io')(server)
+global.io = io;
+require('./socket.js')(io)
 
 mongoose.connect('mongodb://localhost:27017/MediaServer', { useUnifiedTopology:true, useNewUrlParser: true }, (err) => {
   if (err) return console.error(err)
@@ -22,6 +34,9 @@ require('dotenv').config();
 var app = express();
 // app.use(history());
 app.use(cors({ origin: true, credentials: true }));
+// app.use(express.json({limit: '50mb'}));
+// app.use(express.urlencoded({limit: '50mb'}));
+app.use(fileUpload())
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -46,7 +61,7 @@ app.use('/', require('./routes/index'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  res.send(404);
+  res.sendStatus(404);
 });
 
 module.exports = app;

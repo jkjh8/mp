@@ -1,54 +1,50 @@
 <template>
   <div class="q-ma-xl">
     <q-card>
-      <q-item>
-        <q-item-section avatar>
-          <q-avatar color="green">
-            <q-icon name="mdi-play-circle-outline" size="32px" />
-          </q-avatar>
-        </q-item-section>
-
-        <q-item-section>
-          <q-item-label>PLAYLIST</q-item-label>
-          <q-item-label caption>
-            Input your id and password
-          </q-item-label>
-        </q-item-section>
-      </q-item>
-      <q-separator />
       <q-card-section>
-        <q-table
-          :data="data"
-          :columns="columns"
-        >
-          <template v-slot:body="props">
-            <q-tr :props="props" :key="props.row.index">
-               <q-td
-                v-for="col in props.cols"
-                :key="col.name"
-                :props="props"
-              >
-                <div v-if="col.name === 'action'">
-                  <q-btn
-                    @click="playid(col)">Play
-                  </q-btn>
-                </div>
-                <div v-else>
-                  {{ col.value }}
-                </div>
-              </q-td>
-            </q-tr>
-          </template>
-        </q-table>
+        <PlaylistHeader @rtPlaylist="rtPlaylist" @addlist="addFileDialog=!addFileDialog" />
+      </q-card-section>
+      <q-separator />
+
+      <q-card-section>
+        <PlaylistTable :listData="listData" />
       </q-card-section>
     </q-card>
-    {{ data }}
+
+    <q-dialog v-model="addFileDialog">
+       <q-card style="max-width: 1500px; width: 800px">
+        <q-card-section class="q-pa-none">
+          <FilelistTable :selFilelist="selFilelist" @selFile="selFile" />
+        </q-card-section>
+        <q-separator />
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" color="primary" v-close-popup />
+          <q-btn flat label="Confirm" color="primary" v-close-popup @click="updatePlaylist" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
 <script>
-import FormatUtil from '../api/FormatChange'
+import PlaylistHeader from '../components/PlaylistHeader'
+import PlaylistTable from '../components/PlaylistTable'
+import FilelistTable from '../components/FilelistTable'
+import { mapState } from 'vuex'
+
 export default {
+  components: { PlaylistHeader, PlaylistTable, FilelistTable },
+  computed: {
+    ...mapState(['playlistId'])
+  },
+  watch: {
+    addFileDialog (value) {
+      if (this.addFileDialog === false) {
+        console.log('reset')
+        this.selFilelist = []
+      }
+    }
+  },
   created () {
     this.$axios.get('/login').then((res) => {
       if (res.data.user) {
@@ -58,49 +54,39 @@ export default {
       }
     })
   },
-  mounted () {
-    this.$axios.get('/playlist').then((res) => {
-      this.data = res.data
-    }).catch((err) => {
-      if (err.response.status === 403) {
-        this.$router.push('/login')
-      }
-    })
-  },
   data () {
     return {
-      columns: [
-        {
-          name: 'id',
-          label: 'ID',
-          align: 'center',
-          field: 'playid',
-          format: val => `${val + 1}`
-        },
-        { name: 'name', label: 'NAME', align: 'left', field: 'name' },
-        {
-          name: 'duration',
-          label: 'DURATION',
-          align: 'center',
-          field: 'duration',
-          format: val => `${this.formatTimes(val)}`
-        },
-        { name: 'action', label: 'ACTION', align: 'left' }
-      ],
-      data: []
+      listData: [],
+      addFileDialog: false,
+      selFilelist: []
     }
   },
   methods: {
-    playid (id) {
-      console.log(id)
+    rtPlaylist (list) {
+      this.listData = list
     },
-    formatBytes (bytes, decimals = 2) {
-      const listbytes = FormatUtil.formatBytes(bytes, decimals = 2)
-      return listbytes
+    selFile (filelist) {
+      this.selFilelist = filelist
+      // console.log(this.selFilelist)
     },
-    formatTimes (milliseconds) {
-      const listtime = FormatUtil.formatTimes(milliseconds)
-      return listtime
+    async updatePlaylist () {
+      const id = this.playlistId.replace(/[^0-9]/g, '')
+      await this.selFilelist.forEach((file) => {
+        this.listData.push(file)
+      })
+      const rtlist = []
+      await this.listData.forEach((file, index) => {
+        file.playid = index
+        rtlist.push(file)
+      })
+      this.listData = rtlist
+      try {
+        await this.$axios.post('/playlist', { id: id - 1, list: this.listData })
+      } catch (err) {
+        if (err.response.status === 403) {
+          this.$router.push('/login')
+        }
+      }
     }
   }
 }

@@ -1,9 +1,7 @@
 const { Mongoose } = require("mongoose");
-
 const mongoose = require('mongoose')
 
 const playlistSchema = new mongoose.Schema({
-  color: { type: String},
   complete_name: { type: String},
   name: { type: String},
   duration: { type: Number },
@@ -12,6 +10,6 @@ const playlistSchema = new mongoose.Schema({
   size: { type: Number }
 })
 
-const Playlist = mongoose.model('Playlist', playlistSchema)
 
-module.exports = Playlist
+
+module.exports = playlistSchema

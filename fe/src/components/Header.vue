@@ -1,25 +1,27 @@
 <template>
   <q-toolbar>
-    <div class="q-pa-md" style="font-size: 2rem">
+    <q-item class="q-pa-md" style="font-size: 2rem">
       <q-icon name="mdi-play-network-outline" class="q-mx-xm" />
       MEDIA SERVER
-    </div>
+    </q-item>
     <q-space />
-    <div>
-      <p
+    <q-item>
+      <q-item-section
         class="q-px-xs"
         style="font-size: 0.8rem"
         v-if="user"
       >
         {{ user.id }}
-      </p>
-      <q-btn
-        round
-        color="blue-grey-10"
-        :icon="user ? 'mdi-lock-open-outline' : 'mdi-lock-outline'"
-        @click="login"
-      />
-    </div>
+      </q-item-section>
+      <q-item-section>
+        <q-btn
+          round
+          color="blue-grey-10"
+          :icon="user ? 'mdi-lock-open-outline' : 'mdi-lock-outline'"
+          @click="login"
+        />
+      </q-item-section>
+    </q-item>
   </q-toolbar>
 </template>
 
