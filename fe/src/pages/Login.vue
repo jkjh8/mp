@@ -74,14 +74,14 @@ export default {
       this.$axios.post('/login', this.userInfo).then((res) => {
         console.log(res.data.user)
         if (res.data.user) {
-          this.$store.commit('setUser', res.data.user)
+          this.$store.dispatch('user/setUser', res.data.user)
           this.$q.notify({
             color: 'primary',
             textColor: 'white',
             icon: 'mdi-lock-open-outline',
             message: `Welcome ${res.data.user.id}`
           })
-          console.log(this.$store.state.authUser)
+          console.log(this.$store.state.user.authUser)
           this.$router.push('/')
         } else if (res.data.message) {
           this.$q.notify({

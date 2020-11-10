@@ -41,17 +41,14 @@ export default {
       url: `http://${window.location.hostname}:3000/api/uploads`
     }
   },
+  watch: {
+    scope (scope) {
+      console.log(scope.isUploading)
+    }
+  },
   methods: {
     async upload () {
-      const updatefiles = await this.$axios.get('/rffiles')
-      if (updatefiles.data) {
-        const rtdata = []
-        updatefiles.data.forEach((file, index) => {
-          file.index = index + 1
-          rtdata.push(file)
-        })
-        this.$store.dispatch('updateFilelist', rtdata)
-      }
+      this.$store.dispatch('filelist/refreshFilelist')
       this.$emit('upload')
     }
   }

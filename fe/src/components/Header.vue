@@ -1,8 +1,10 @@
 <template>
   <q-toolbar>
-    <q-item class="q-pa-md" style="font-size: 2rem">
-      <q-icon name="mdi-play-network-outline" class="q-mx-xm" />
-      MEDIA SERVER
+    <q-item class="q-pa-md">
+      <q-btn flat style="font-size: 2em" to="/">
+        <q-icon name="mdi-play-network-outline" class="q-mx-xm" />
+        MEDIA SERVER
+      </q-btn>
     </q-item>
     <q-space />
     <q-item>
@@ -29,7 +31,9 @@
 import { mapState } from 'vuex'
 export default {
   computed: {
-    ...mapState({ user: 'authUser' })
+    ...mapState({
+      user: state => state.user.authUser
+    })
   },
   data () {
     return {
@@ -41,7 +45,7 @@ export default {
       if (this.user) {
         this.$axios.get('/logout').then((res) => {
           if (res.data.success) {
-            this.$store.commit('setUser', null)
+            this.$store.dispatch('user/setUser', null)
             this.$q.notify({
               color: 'red-5',
               textColor: 'white',

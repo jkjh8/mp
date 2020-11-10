@@ -30,12 +30,13 @@
 import PlaylistHeader from '../components/PlaylistHeader'
 import PlaylistTable from '../components/PlaylistTable'
 import FilelistTable from '../components/FilelistTable'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   components: { PlaylistHeader, PlaylistTable, FilelistTable },
   computed: {
-    ...mapState(['playlistId'])
+    ...mapState('playlist', ['playlistName']),
+    ...mapGetters('playlist', ['playlistId'])
   },
   watch: {
     addFileDialog (value) {
@@ -46,13 +47,8 @@ export default {
     }
   },
   created () {
-    this.$axios.get('/login').then((res) => {
-      if (res.data.user) {
-        this.$store.commit('setUser', res.data.user)
-      } else {
-        this.$router.push('/')
-      }
-    })
+    this.$store.dispatch('user/getUser')
+    if (!this.$store.state.user.authUser) return this.$router.push('/login')
   },
   data () {
     return {
@@ -70,18 +66,19 @@ export default {
       // console.log(this.selFilelist)
     },
     async updatePlaylist () {
-      const id = this.playlistId.replace(/[^0-9]/g, '')
       await this.selFilelist.forEach((file) => {
         this.listData.push(file)
       })
+      console.log(this.listData)
       const rtlist = []
       await this.listData.forEach((file, index) => {
         file.playid = index
         rtlist.push(file)
       })
       this.listData = rtlist
+      console.log(this.listData)
       try {
-        await this.$axios.post('/playlist', { id: id - 1, list: this.listData })
+        await this.$axios.post('/playlist', { id: this.playlistId - 1, list: this.listData })
       } catch (err) {
         if (err.response.status === 403) {
           this.$router.push('/login')

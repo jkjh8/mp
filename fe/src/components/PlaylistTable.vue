@@ -2,6 +2,7 @@
   <q-table
   :data="listData"
   :columns="columns"
+  row-key="index"
   >
     <template v-slot:body="props">
       <q-tr :props="props" :key="props.row.index">
@@ -27,13 +28,18 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import format from '../api/formats'
 
 export default {
   props: ['listData'],
   computed: {
-    ...mapState(['playlistId'])
+    ...mapState({
+      playlistName: state => state.playlist.playlistName
+    }),
+    ...mapGetters({
+      playlistId: gatters => gatters.playlist.playlistId
+    })
   },
   data () {
     return {
@@ -47,8 +53,7 @@ export default {
   },
   methods: {
     playid (playid) {
-      const id = this.playlistId.replace(/[^0-9]/g, '')
-      this.$axios.get(`/player/playid?id=${id - 1}&playid=${playid}`)
+      this.$axios.get(`/player/playid?id=${this.playlistId - 1}&playid=${playid}`)
     },
     stop () {
       this.$axios.get('/player.stop')
@@ -70,9 +75,9 @@ export default {
       }
     },
     async updatePlaylist () {
-      const id = this.playlistId.replace(/[^0-9]/g, '')
+      console.log(this.listData)
       try {
-        await this.$axios.post('/playlist', { id: id - 1, list: this.listData })
+        await this.$axios.post('/playlist', { id: this.playlistId - 1, list: this.listData })
       } catch (err) {
         if (err.response.status === 403) {
           this.$router.push('/login')
@@ -80,7 +85,6 @@ export default {
       }
     },
     async del (fileIndex) {
-      const id = this.playlistId.replace(/[^0-9]/g, '')
       const rtlist = []
       this.listData.splice(fileIndex, 1)
       await this.listData.forEach((file, index) => {
@@ -89,7 +93,7 @@ export default {
       })
       this.listData = rtlist
       try {
-        await this.$axios.post('/playlist', { id: id - 1, list: this.listData })
+        await this.$axios.post('/playlist', { id: this.playlistId - 1, list: this.listData })
       } catch (err) {
         if (err.response.status === 403) {
           this.$router.push('/login')

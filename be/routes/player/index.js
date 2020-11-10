@@ -6,7 +6,7 @@ const port = 12302
 
 const udpSender = dgram.createSocket('udp4')
 
-router.get('/play/:filename', async function(req, res, next) {
+router.get('/p/:filename', async function(req, res, next) {
   const msg = new Buffer.from(`play,${req.params.filename}`)
   await udpSender.send(msg, 0, msg.length, port, host, (err) => {
     if (err) return res.json({ success: true, error: err})
@@ -14,13 +14,19 @@ router.get('/play/:filename', async function(req, res, next) {
   return res.json({ success: true})
 });
 
-router.get('/playid/', async function(req, res, next) {
-  console.log(req.query.id, req.query.playid)
+router.get('/pi/', async function(req, res, next) {
+  const msg = new Buffer.from(`pi,${req.params.id},${req.params.playid}`)
+  await udpSender.send(msg, 0, msg.length, port, host, (err) => {
+    if (err) return res.json({ success: true, error: err})
+  })
+  return res.json({ success: true})
+});
 
-  // const msg = new Buffer.from(`playid,${req.params.playid}`)
-  // await udpSender.send(msg, 0, msg.length, port, host, (err) => {
-  //   if (err) return res.json({ success: true, error: err})
-  // })
+router.get('/pl/:id', async function(req, res, next) {
+  const msg = new Buffer.from(`pl,${req.params.id}`)
+  await udpSender.send(msg, 0, msg.length, port, host, (err) => {
+    if (err) return res.json({ success: true, error: err})
+  })
   return res.json({ success: true})
 });
 

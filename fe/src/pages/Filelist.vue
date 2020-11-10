@@ -36,14 +36,8 @@ let delFilelist = []
 export default {
   components: { FilelistHeader, FileUpload, FilelistTable },
   created () {
-    this.$axios.get('/login').then((res) => {
-      if (res.data.user) {
-        this.$store.dispatch('setUser', res.data.user)
-      } else {
-        this.$store.dispatch('setUser', null)
-        this.$router.push('/')
-      }
-    })
+    this.$store.dispatch('user/getUser')
+    if (!this.$store.state.user.authUser) return this.$router.push('/login')
   },
   data () {
     return {
@@ -60,16 +54,8 @@ export default {
     },
     async delFiles () {
       await this.$axios.post('/filelist/del', delFilelist)
-      const files = await this.$axios.get('/rffiles')
-      if (files.data) {
-        const rtdata = []
-        files.data.forEach((file, index) => {
-          file.index = index + 1
-          rtdata.push(file)
-        })
-        this.$store.dispatch('updateFilelist', rtdata)
-        this.selFilelist = []
-      }
+      await this.$store.dispatch('filelist/refreshFilelist')
+      this.selFilelist = []
     },
     selFile (filelist) {
       delFilelist = filelist

@@ -18,6 +18,7 @@
           label="Select Playlist"
           dense
           style="width: 200px"
+          @input="call_playlist()"
         />
       </q-item-section>
       <q-item-section side>
@@ -43,22 +44,21 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   mounted () {
     this.select_palylist()
   },
   computed: {
-    ...mapState(['playlistId'])
+    ...mapState('playlist', ['playlistName']),
+    ...mapGetters('playlist', ['playlistId'])
   },
-  watch: {
-    playlistSel (value) {
-      this.$store.dispatch('setPlaylistId', value)
-      const id = this.playlistId.replace(/[^0-9]/g, '')
-      this.call_playlist(id - 1)
-    }
-  },
+  // watch: {
+  //   playlistSel (value) {
+  //     this.$store.dispatch('playlist/setPlaylistName', value)
+  //   }
+  // },
   data () {
     return {
       list: ['Playlist 1', 'Playlist 2', 'Playlist 3', 'Playlist 4', 'Playlist 5', 'Playlist 6', 'Playlist 7', 'Playlist 8'],
@@ -67,11 +67,13 @@ export default {
   },
   methods: {
     select_palylist () {
-      this.playlistSel = this.playlistId
+      this.playlistSel = this.playlistName
     },
-    call_playlist (id) {
-      this.$axios.get(`/playlist/${id}`).then((res) => {
+    call_playlist () {
+      this.$store.dispatch('playlist/setPlaylistName', this.playlistSel)
+      this.$axios.get(`/playlist/${this.playlistId - 1}`).then((res) => {
         this.$emit('rtPlaylist', res.data)
+        console.log(res.data)
       }).catch((err) => {
         if (err.response.status === 403) {
           this.$router.push('/login')

@@ -1,7 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
+import user from './user/index.js'
+import filelist from './filelist/index.js'
+import playlist from './playlist/index.js'
 
-// import example from './module-example'
+axios.defaults.baseURL = 'http://' + window.location.hostname + ':3000/api'
+axios.defaults.withCredentials = true
 
 Vue.use(Vuex)
 
@@ -16,34 +21,9 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      //
-    },
-    state: {
-      authUser: null,
-      playlistId: 'Playlist 1',
-      filelist: []
-    },
-    mutations: {
-      setUser (state, payload) {
-        state.authUser = payload
-      },
-      setPlaylistId (state, payload) {
-        state.playlistId = payload
-      },
-      updateFilelist (state, payload) {
-        state.filelist = payload
-      }
-    },
-    actions: {
-      setUser ({ commit }, payload) {
-        commit('setUser', payload)
-      },
-      setPlaylistId ({ commit }, payload) {
-        commit('setPlaylistId', payload)
-      },
-      updateFilelist ({ commit }, payload) {
-        commit('updateFilelist', payload)
-      }
+      user,
+      filelist,
+      playlist
     },
     strict: process.env.DEBUGGING
   })

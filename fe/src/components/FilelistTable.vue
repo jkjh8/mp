@@ -30,10 +30,12 @@ import format from '../api/formats'
 export default {
   props: ['selFilelist'],
   computed: {
-    ...mapState(['filelist'])
+    ...mapState({
+      filelist: state => state.filelist.filelist
+    })
   },
   mounted () {
-    this.updateFilelist()
+    this.$store.dispatch('filelist/updateFilelist')
     // this.$socket.on('playlist', (data) => { console.log(data) })
   },
   watch: {
@@ -75,17 +77,6 @@ export default {
     }
   },
   methods: {
-    async updateFilelist () {
-      const files = await this.$axios.get('filelist')
-      if (files.data) {
-        const rtdata = []
-        files.data.forEach((file, index) => {
-          file.index = index + 1
-          rtdata.push(file)
-        })
-        this.$store.dispatch('updateFilelist', rtdata)
-      }
-    },
     preview (id) {
       this.$emit('preview', id)
     }
