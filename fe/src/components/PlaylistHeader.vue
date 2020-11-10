@@ -47,38 +47,26 @@
 import { mapState, mapGetters } from 'vuex'
 
 export default {
-  mounted () {
-    this.select_palylist()
-  },
   computed: {
     ...mapState('playlist', ['playlistName']),
     ...mapGetters('playlist', ['playlistId'])
   },
-  // watch: {
-  //   playlistSel (value) {
-  //     this.$store.dispatch('playlist/setPlaylistName', value)
-  //   }
-  // },
+  mounted () {
+    this.playlistSel = this.playlistName
+  },
   data () {
     return {
       list: ['Playlist 1', 'Playlist 2', 'Playlist 3', 'Playlist 4', 'Playlist 5', 'Playlist 6', 'Playlist 7', 'Playlist 8'],
-      playlistSel: null
+      playlistSel: ''
     }
   },
   methods: {
     select_palylist () {
       this.playlistSel = this.playlistName
     },
-    call_playlist () {
-      this.$store.dispatch('playlist/setPlaylistName', this.playlistSel)
-      this.$axios.get(`/playlist/${this.playlistId - 1}`).then((res) => {
-        this.$emit('rtPlaylist', res.data)
-        console.log(res.data)
-      }).catch((err) => {
-        if (err.response.status === 403) {
-          this.$router.push('/login')
-        }
-      })
+    async call_playlist () {
+      await this.$store.dispatch('playlist/setPlaylistName', this.playlistSel)
+      this.$store.dispatch('playlist/reqPlaylist')
     },
     addlist () {
       this.$emit('addlist')

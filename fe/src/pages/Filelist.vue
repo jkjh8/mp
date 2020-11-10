@@ -35,8 +35,8 @@ let delFilelist = []
 
 export default {
   components: { FilelistHeader, FileUpload, FilelistTable },
-  created () {
-    this.$store.dispatch('user/getUser')
+  async created () {
+    await this.$store.dispatch('user/getUser')
     if (!this.$store.state.user.authUser) return this.$router.push('/login')
   },
   data () {

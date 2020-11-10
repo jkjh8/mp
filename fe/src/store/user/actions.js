@@ -4,8 +4,8 @@ import { Notify } from 'quasar'
 axios.defaults.baseURL = 'http://' + window.location.hostname + ':3000/api'
 axios.defaults.withCredentials = true
 
-const getUser = ({ commit }) => {
-  axios.get('/login').then((res) => {
+const getUser = async ({ commit }) => {
+  await axios.get('/login').then((res) => {
     if (res.data.user) {
       commit('setUser', res.data.user)
     } else {

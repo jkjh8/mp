@@ -15,7 +15,7 @@ router.get('/p/:filename', async function(req, res, next) {
 });
 
 router.get('/pi/', async function(req, res, next) {
-  const msg = new Buffer.from(`pi,${req.params.id},${req.params.playid}`)
+  const msg = new Buffer.from(`pi,${req.query.id},${req.query.playid}`)
   await udpSender.send(msg, 0, msg.length, port, host, (err) => {
     if (err) return res.json({ success: true, error: err})
   })

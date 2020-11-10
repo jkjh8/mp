@@ -2,12 +2,12 @@
   <div class="q-ma-xl">
     <q-card>
       <q-card-section>
-        <PlaylistHeader @rtPlaylist="rtPlaylist" @addlist="addFileDialog=!addFileDialog" />
+        <PlaylistHeader @addlist="addFileDialog=!addFileDialog" />
       </q-card-section>
       <q-separator />
 
       <q-card-section>
-        <PlaylistTable :listData="listData" />
+        <PlaylistTable />
       </q-card-section>
     </q-card>
 
@@ -30,60 +30,31 @@
 import PlaylistHeader from '../components/PlaylistHeader'
 import PlaylistTable from '../components/PlaylistTable'
 import FilelistTable from '../components/FilelistTable'
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { PlaylistHeader, PlaylistTable, FilelistTable },
   computed: {
-    ...mapState('playlist', ['playlistName']),
     ...mapGetters('playlist', ['playlistId'])
   },
-  watch: {
-    addFileDialog (value) {
-      if (this.addFileDialog === false) {
-        console.log('reset')
-        this.selFilelist = []
-      }
-    }
-  },
-  created () {
-    this.$store.dispatch('user/getUser')
-    if (!this.$store.state.user.authUser) return this.$router.push('/login')
+  async mounted () {
+    await this.$store.dispatch('user/getUser')
+    if (this.$store.state.user.authUser === null) return this.$router.push('/login')
   },
   data () {
     return {
-      listData: [],
       addFileDialog: false,
+      listData: [],
       selFilelist: []
     }
   },
   methods: {
-    rtPlaylist (list) {
-      this.listData = list
-    },
     selFile (filelist) {
-      this.selFilelist = filelist
-      // console.log(this.selFilelist)
+      this.listData = filelist
     },
     async updatePlaylist () {
-      await this.selFilelist.forEach((file) => {
-        this.listData.push(file)
-      })
-      console.log(this.listData)
-      const rtlist = []
-      await this.listData.forEach((file, index) => {
-        file.playid = index
-        rtlist.push(file)
-      })
-      this.listData = rtlist
-      console.log(this.listData)
-      try {
-        await this.$axios.post('/playlist', { id: this.playlistId - 1, list: this.listData })
-      } catch (err) {
-        if (err.response.status === 403) {
-          this.$router.push('/login')
-        }
-      }
+      await this.$store.dispatch('playlist/addPlaylist', this.listData)
+      await this.$store.dispatch('playlist/reqPlaylist')
     }
   }
 }

@@ -1,5 +1,6 @@
 export default function () {
   return {
-    playlistName: 'Playlist 1'
+    playlistName: 'Playlist 1',
+    curPlaylist: []
   }
 }

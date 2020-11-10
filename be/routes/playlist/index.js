@@ -21,20 +21,32 @@ router.post('/', async function(req, res, next) {
   const id = req.body.id
   const list = req.body.list
 
-  await db_Playlist[id].deleteMany({})
+  console.log(id)
+  try {
+    await db_Playlist[id].deleteMany()
+  } catch (err) {
+    console.log(err)
+  }
   const rtlist = await db_Playlist[id].insertMany(list)
 
   return res.json(rtlist)
+})
 
+router.post('/update', async function(req, res, next) {
+  const id = req.body.id
+  const list = req.body.list
 
-  // db_filelist.deleteMany({}, (err, docu) => {
-  //   if (err) return console.error(err)
-  //   db_Playlist.insertMany(req.playlist, (err, docu) => {
-  //     if (err) return console.error(err)
-  //     return res.json(docu)
-  //   })
-  // }) (req, res, next)
-  // return res.json({ success: false })
+  console.log(id)
+  const rtlist = await db_Playlist[id].insertMany(list)
+
+  return res.json(rtlist)
+})
+
+router.post('/remove', async function(req, res, next) {
+  const id = req.body.id
+  const playid = req.body.playid
+  const r = await db_Playlist[id].deleteOne({ playid: playid })
+  return res.json(r)
 })
 
 module.exports = router;

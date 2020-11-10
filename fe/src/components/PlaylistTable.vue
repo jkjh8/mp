@@ -1,6 +1,6 @@
 <template>
   <q-table
-  :data="listData"
+  :data="curPlaylist"
   :columns="columns"
   row-key="index"
   >
@@ -32,14 +32,12 @@ import { mapState, mapGetters } from 'vuex'
 import format from '../api/formats'
 
 export default {
-  props: ['listData'],
   computed: {
-    ...mapState({
-      playlistName: state => state.playlist.playlistName
-    }),
-    ...mapGetters({
-      playlistId: gatters => gatters.playlist.playlistId
-    })
+    ...mapState('playlist', ['curPlaylist']),
+    ...mapGetters('playlist', ['playlistId'])
+  },
+  mounted () {
+    this.$store.dispatch('playlist/reqPlaylist')
   },
   data () {
     return {
@@ -53,52 +51,31 @@ export default {
   },
   methods: {
     playid (playid) {
-      this.$axios.get(`/player/playid?id=${this.playlistId - 1}&playid=${playid}`)
+      this.$axios.get(`/player/pi?id=${this.playlistId - 1}&playid=${playid}`)
     },
     stop () {
       this.$axios.get('/player.stop')
     },
     async changeList (fromIndex, toIndex) {
-      const minIndex = 0
-      const maxIndex = this.listData.length - 1
-
-      if (maxIndex < toIndex) { return }
-      if (toIndex < minIndex) { return }
-
-      this.listData.splice(toIndex, 0, this.listData.splice(fromIndex, 1)[0])
-      await this.changePlayId()
-      this.updatePlaylist()
-    },
-    changePlayId () {
-      for (let i = 0; i < this.listData.length; i++) {
-        this.listData[i].playid = i
-      }
-    },
-    async updatePlaylist () {
-      console.log(this.listData)
-      try {
-        await this.$axios.post('/playlist', { id: this.playlistId - 1, list: this.listData })
-      } catch (err) {
-        if (err.response.status === 403) {
-          this.$router.push('/login')
-        }
-      }
-    },
-    async del (fileIndex) {
-      const rtlist = []
-      this.listData.splice(fileIndex, 1)
-      await this.listData.forEach((file, index) => {
-        file.playid = index
-        rtlist.push(file)
+      var squPlaylist = []
+      this.curPlaylist.forEach(file => {
+        squPlaylist.push(file)
       })
-      this.listData = rtlist
-      try {
-        await this.$axios.post('/playlist', { id: this.playlistId - 1, list: this.listData })
-      } catch (err) {
-        if (err.response.status === 403) {
-          this.$router.push('/login')
-        }
-      }
+      const minIndex = 0
+      const maxIndex = squPlaylist.length - 1
+
+      if (maxIndex < toIndex) { toIndex = minIndex }
+      if (toIndex < minIndex) { toIndex = maxIndex }
+
+      await squPlaylist.splice(toIndex, 0, squPlaylist.splice(fromIndex, 1)[0])
+      await this.$axios.post('/playlist', { id: this.playlistId - 1, list: squPlaylist })
+      await this.$store.dispatch('playlist/reqPlaylist')
+      await this.$store.dispatch('playlist/rebuildPlaylist')
+    },
+    async del (playid) {
+      await this.$axios.post('/playlist/remove', { id: this.playlistId - 1, playid: playid })
+      await this.$store.dispatch('playlist/reqPlaylist')
+      await this.$store.dispatch('playlist/rebuildPlaylist')
     }
   }
 }

@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var path = require('path');
+// var path = require('path');
 
 const isAuthenticated = () => (req, res, next) => {
   console.log(req.user)

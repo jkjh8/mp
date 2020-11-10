@@ -30,9 +30,7 @@ import format from '../api/formats'
 export default {
   props: ['selFilelist'],
   computed: {
-    ...mapState({
-      filelist: state => state.filelist.filelist
-    })
+    ...mapState('filelist', ['filelist'])
   },
   mounted () {
     this.$store.dispatch('filelist/updateFilelist')

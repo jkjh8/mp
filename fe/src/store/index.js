@@ -25,7 +25,8 @@ export default function (/* { ssrContext } */) {
       filelist,
       playlist
     },
-    strict: process.env.DEBUGGING
+    // strict: process.env.DEBUGGING
+    strict: false
   })
 
   return Store
