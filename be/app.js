@@ -4,7 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const session = require('express-session')
 const passport = require('passport')
-// const history = require('connect-history-api-fallback'); 
+const history = require('connect-history-api-fallback'); 
 const cors = require('cors');
 const logger = require('morgan');
 
@@ -17,11 +17,6 @@ const MongoStore = require("connect-mongo")(session);
 const User = require('./models/User.js');
 const { RequestTimeout } = require('http-errors');
 
-//socket io
-const server = http.createServer(app);
-const io = require('socket.io')(server)
-global.io = io;
-require('./socket.js')(io)
 
 mongoose.connect('mongodb://localhost:27017/MediaServer', { useUnifiedTopology:true, useNewUrlParser: true }, (err) => {
   if (err) return console.error(err)
@@ -32,7 +27,7 @@ require('./passport').config(passport);
 require('dotenv').config();
 
 var app = express();
-// app.use(history());
+app.use(history());
 app.use(cors({ origin: true, credentials: true }));
 // app.use(express.json({limit: '50mb'}));
 // app.use(express.urlencoded({limit: '50mb'}));

@@ -11,6 +11,7 @@ router.get('/', async function(req, res, next) {
 router.post('/', function(req, res, next) {
   db_setup.save(req.setup, (err, docu) => {
     if (err) return console.error(err)
+    io.emit('filelist', docu)
     return res.json(docu)
   }) (req, res, next)
   return res.json({ success: false })

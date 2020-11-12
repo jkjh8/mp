@@ -40,6 +40,7 @@ export default {
   async mounted () {
     await this.$store.dispatch('user/getUser')
     if (this.$store.state.user.authUser === null) return this.$router.push('/login')
+    await this.$store.dispatch('playlist/reqPlaylist')
   },
   data () {
     return {

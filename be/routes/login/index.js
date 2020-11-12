@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
   if (req.isAuthenticated() && req.user) {
     return res.json({ user: req.user });
   }
-  return res.json({ user: null })
+  return res.redirect('/')
 });
 
 router.post('/', function(req, res, next) {

@@ -34,13 +34,8 @@ const addPlaylist = async ({ state, getters }, payload) => {
   try {
     await axios.post('/playlist/update', { id: getters.playlistId - 1, list: rtlist })
   } catch (err) {
-    Notify.create({
-      color: 'red-5',
-      textColor: 'white',
-      timeout: 1000,
-      icon: 'warning',
-      message: err
-    })
+    Notify.create({ color: 'red-5', textColor: 'white', timeout: 1000, icon: 'warning', message: err })
+    console.log(err.response)
   }
 }
 

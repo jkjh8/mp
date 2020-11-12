@@ -23,9 +23,17 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-// var io = require('socket.io')(server)
-// global.io = io;
-// require('../socket.js')(io)
+//socket io
+var io = require('socket.io')(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["my-custom-header"],
+    credentials: true
+  }
+})
+global.io = io;
+require('../socket.js')(io)
 
 /**
  * Listen on provided port, on all network interfaces.

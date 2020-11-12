@@ -11,13 +11,14 @@ const mediaFolder = path.join(homedir, '/media')
 
 router.get('/', async function(req, res, next) {
   const filelist = await db_filelist.find({}).select({ _id: 0 })
+  console.log(filelist)
+  
   res.json(filelist)  
 });
 
 router.post('/del', async function(req, res, next) {
   const files = req.body
   files.forEach((file) => {
-    console.log(file.complete_name)
     try{
       fs.unlinkSync(file.complete_name)
     } catch (err) {

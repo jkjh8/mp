@@ -13,7 +13,7 @@
         >
           <div v-if="col.name === 'action'">
             <q-btn flat round color="primary" size="0.8em" icon="mdi-play" @click="playid(props.pageIndex)" />
-            <q-btn flat round color="red" size="0.8em" icon="mdi-stop" @click="playid(props.pageIndex)" />
+            <q-btn flat round color="red" size="0.8em" icon="mdi-stop" @click="stop(props.pageIndex)" />
             <q-btn flat round color="black" size="0.8em" icon="mdi-delete" @click="del(props.pageIndex)" />
             <q-btn flat round color="black" size="0.8em" icon="mdi-chevron-up" @click="changeList(props.pageIndex, props.pageIndex - 1)" />
             <q-btn flat round color="black" size="0.8em" icon="mdi-chevron-down" @click="changeList(props.pageIndex, props.pageIndex + 1)" />
@@ -54,7 +54,7 @@ export default {
       this.$axios.get(`/player/pi?id=${this.playlistId - 1}&playid=${playid}`)
     },
     stop () {
-      this.$axios.get('/player.stop')
+      this.$axios.get('/player/stop')
     },
     async changeList (fromIndex, toIndex) {
       var squPlaylist = []

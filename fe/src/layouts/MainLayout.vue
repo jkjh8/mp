@@ -19,6 +19,14 @@ import Footer from 'components/Footer.vue'
 export default {
   name: 'MainLayout',
   components: { Header, HeaderMenu, Footer },
+  mounted () {
+    this.$socket.on('playlist', (data) => {
+      this.$store.dispatch('playlist/reqPlaylist')
+    })
+    this.$socket.on('filelist', (data) => {
+      this.$store.dispatch('filelist/updateFilelist')
+    })
+  },
   data () {
     return {
       //

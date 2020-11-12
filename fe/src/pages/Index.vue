@@ -1,14 +1,20 @@
 <template>
   <q-page class="flex flex-center">
-    <img
-      alt="Quasar logo"
-      src="~assets/quasar-logo-full.svg"
-    >
+    <q-card>
+      <q-card-section>
+         Current Playlist {{ playlistId }}
+      </q-card-section>
+    </q-card>
   </q-page>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-  name: 'PageIndex'
+  name: 'PageIndex',
+  computed: {
+    ...mapGetters('playlist', ['playlistId'])
+  }
 }
 </script>

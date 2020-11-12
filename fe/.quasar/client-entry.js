@@ -38,6 +38,8 @@ import createApp from './app.js'
 
 import qboot_Bootaxios from 'boot/axios'
 
+import qboot_Bootsocketio from 'boot/socketio'
+
 
 
 
@@ -55,7 +57,7 @@ console.info('[Quasar] Running SPA.')
 
 
 
-const publicPath = ``
+const publicPath = `/`
 
 
 async function start () {
@@ -75,7 +77,7 @@ async function start () {
   }
 
   const urlPath = window.location.href.replace(window.location.origin, '')
-  const bootFiles = [qboot_Bootaxios]
+  const bootFiles = [qboot_Bootaxios,qboot_Bootsocketio]
 
   for (let i = 0; hasRedirected === false && i < bootFiles.length; i++) {
     if (typeof bootFiles[i] !== 'function') {

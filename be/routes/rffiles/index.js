@@ -24,6 +24,7 @@ router.get('/', async function(req, res, next) {
   await db_filelist.deleteMany({})
   const rtmsg = await db_filelist.insertMany(fileinfoArray)
   if (rtmsg) {
+    io.emit('filelist', rtmsg)
     return res.json(rtmsg)
   }
   return res.json({ success: false })
